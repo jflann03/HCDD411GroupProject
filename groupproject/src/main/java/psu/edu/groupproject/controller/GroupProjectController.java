@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class GroupProjectController {
-    @GetMapping("/") 
+    @GetMapping("/")
         public String showHome() {
             return "home";
         }

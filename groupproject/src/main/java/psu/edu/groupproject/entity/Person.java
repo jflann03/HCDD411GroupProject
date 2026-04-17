@@ -7,7 +7,12 @@ package psu.edu.groupproject.entity;
 
 import java.sql.Date;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 @Entity
 @Table(name="employees")
 public class Person {
@@ -45,26 +50,14 @@ public class Person {
     private String emergencyContactName;
 	
 	@Column(name="emergency_contact_phone_number")
-    private String emergencyContactPhoneNumber;
+    private String emergencyContactPhoneNumber;                 
 	
-	
-	
-   
-    
-    
-    
-    
-   
-   
-
-    public Person() {
-        // default
-    }
 
     // full constructor (optional)
     public Person(int employeeId, String lastName, String firstName, Double salary, Date startDate,
                   Boolean employeeContractSigned, String socialSecurityNumber, Date birthday,
                   String phoneNumber, String emergencyContactName, String emergencyContactPhoneNumber) {
+
         this.employeeId = employeeId;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -77,6 +70,7 @@ public class Person {
         this.emergencyContactName = emergencyContactName;
         this.emergencyContactPhoneNumber = emergencyContactPhoneNumber;
     }
+	// Getters & Setters
 
 	public int getEmployeeId() {
 		return employeeId;
@@ -165,7 +159,4 @@ public class Person {
 	public void setEmergencyContactPhoneNumber(String emergencyContactPhoneNumber) {
 		this.emergencyContactPhoneNumber = emergencyContactPhoneNumber;
 	}
-
-    // getters & setters
-    
 }

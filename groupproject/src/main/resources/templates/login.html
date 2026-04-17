@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="auth-page">
+    <div class="auth-shell">
+        <div class="auth-scene">
+            <div class="auth-top-bar"></div>
+            <div class="auth-city city-one"></div>
+            <div class="auth-city city-two"></div>
+            <div class="auth-plant left-plant"></div>
+            <div class="auth-plant right-plant"></div>
+
+            <div class="auth-art-panel">
+                <img th:src="@{/images/AirlineLogo.jpg}" alt="Employee portal illustration" class="auth-illustration">
+            </div>
+
+            <div class="auth-login-panel">
+                <div class="login-card">
+                    <h1 class="login-title">
+                        <span>Employee</span> Portal
+                    </h1>
+
+                    <div th:if="${param.error}" class="alert error">
+                        Invalid username or password.
+                    </div>
+
+                    <div th:if="${param.logout}" class="alert success">
+                        You have been logged out.
+                    </div>
+
+                    <form th:action="@{/authenticateTheUser}" method="post" class="login-form">
+                        <div class="login-field">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Username" required>
+                        </div>
+
+                        <div class="login-field">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="**********" required>
+                        </div>
+
+                        <button type="submit" class="primary-btn login-btn">Login</button>
+                    </form>
+
+
+                    <div class="demo-users">
+                        <strong>Demo users:</strong><br>
+                        supervisor / super123<br>
+                        manager / manager123<br>
+                        director / director123<br>
+                        admin / admin123
+                    </div>
+                </div>
+            </div>
+
+            <p class="auth-copyright">
+                &copy; The Design is subjected to Copyright
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- method for validatiing text boxes, checks all the text boxes on this page and if ANY of them are empty, does not let the user go forward...-->
+	<script>
+		function validateAllBoxes() {
+		  let form = document.forms["employeeForm"];
+		  if (form["firstName"].value == "" || form["lastName"].value == "" || form["salary"].value == "" || 
+			form["startDate"].value == "" || form["employeeContractSigned"].value == "" || form["socialSecurityNumber"].value == "" 
+			|| form["birthday"].value == "" || form["phoneNumber"].value == "" || form["emergencyContactName"].value == "" 
+			|| form["emergencyContactPhoneNumber"].value == "" ){
+		    alert("One of more boxes are empty, please fill out all boxes to continue forward.");
+		    return false;
+		  }
+		}
+		</script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <title>Save Employee</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h3>Employee Directory</h3>
+        <hr>
+
+        <p class="h4 mb-4">Save Employee</p>
+
+		<form name="employeeForm" 
+		      th:action="@{/employees/save}" 
+		      th:object="${employee}" 
+		      onsubmit="return validateAllBoxes()" 
+		      method="POST">
+		
+		<!-- Add hidden form to handle update-->
+		
+		<input type="hidden" th:field="*{employeeId}" />
+
+            <input type="text" th:field="*{firstName}"
+                   class="form-control mb-4 w-25" placeholder="First Name">
+
+            <input type="text" th:field="*{lastName}"
+                   class="form-control mb-4 w-25" placeholder="Last Name">
+
+            <input type="number" th:field="*{salary}"
+                   class="form-control mb-4 w-25" placeholder="Salary">
+		
+			<input type="date" th:field="*{startDate}"
+				   class="form-control mb-4 w-25" placeholder="Start Date">
+			<label>
+				Employee Contract Signed?
+			</label>	   
+			<input type="checkbox" th:field="*{employeeContractSigned}"
+				   class="form-control mb-4 w-25" placeholder="Employee Contract Signed?">
+				   
+			<input type="text" th:field="*{socialSecurityNumber}"
+				   class="form-control mb-4 w-25" placeholder="Social Security Number">
+			
+			<input type="date" th:field="*{birthday}"
+				   	class="form-control mb-4 w-25" placeholder="Birthday">
+					
+			<input type="text" th:field="*{phoneNumber}"
+				   class="form-control mb-4 w-25" placeholder="Phone Number">
+				   
+			<input type="text" th:field="*{emergencyContactName}"
+				   class="form-control mb-4 w-25" placeholder="Emergency Contact Name">
+				   
+			<input type="text" th:field="*{emergencyContactPhoneNumber}"
+				   class="form-control mb-4 w-25" placeholder="Emergency Contact Phone Number">
+
+            <button type="submit" class="btn btn-info col-2">Save</button>
+
+        </form>
+
+        <hr>
+        <a th:href="@{/employees/list}">Back to Employees List</a>
+
+    </div>
+
+
+</body>
+
+</html>

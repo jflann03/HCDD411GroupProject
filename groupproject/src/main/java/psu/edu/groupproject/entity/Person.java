@@ -34,7 +34,7 @@ public class Person {
     private String firstName;
 
     @NotNull(message = "Salary is required")
-    @Column(name = "salary", nullable = false)
+    @Column(name = "start_salary", nullable = false)
     private Double salary;
 
     @NotNull(message = "Start date is required")
@@ -50,13 +50,13 @@ public class Person {
     @Column(name = "social_security_number", nullable = false)
     private String socialSecurityNumber;
 
-    @NotNull(message = "Birthday is required")
+    @NotNull(message = "Birthdate is required")
     @Past(message = "Birthdate must be in the past")
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthdate", nullable = false)
     private Date birthday;
 
     @NotBlank(message = "Phone number is required")
-    @Column(name = "phoneNumber", nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @NotBlank(message = "Emergency contact name is required")

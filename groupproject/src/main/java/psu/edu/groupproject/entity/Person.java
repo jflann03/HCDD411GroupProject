@@ -13,6 +13,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name="employees")
 public class Person {
@@ -22,34 +28,48 @@ public class Person {
 	@Column(name="employee_id")
     private int employeeId; // unique employee_ID
 	
-	@Column(name="last_name")
+	@NotBlank(message = "Last name is required")
+	@Size(max = 50)
+	@Column(name="last_name", nullable = false)
 	private String lastName; // employee name field
-	
-	@Column(name="first_name")
+
+	@NotBlank(message = "First name is required")
+	@Size(max = 50)
+	@Column(name="first_name", nullable = false)
 	private String firstName; // employee name field
 	
-	@Column(name="salary")
+	@NotNull(message = "Salary is required")
+	@Column(name="salary", nullable = false)
 	 private Double salary; // use Double to allow null
 	
-	@Column(name="start_date")
+	@NotBlank(message = "Start date is required")
+	@PastOrPresent(message = "Start date cannot be in the future")
+	@Column(name="start_date", nullable = false)
 	private Date startDate; // employment start date 
 	
-	@Column(name="employee_contract_signed")
+	@NotNull(message = "Status of contract is required")
+	@Column(name="employee_contract_signed", nullable = false)
 	private Boolean employeeContractSigned; // shows if employer has signed contract 
 	
-	@Column(name="social_security_number")
+	@NotNull(message = "SSN is required")
+	@Column(name="social_security_number", nullable = false)
 	private String socialSecurityNumber; // social security number
 	
-	@Column(name="birthday")
+	@NotNull(message = "Birthday is required")
+	@Past(message = "Birthdate must be in the past")
+	@Column(name="birthday", nullable = false)
     private Date birthday; // unique employee_ID 
 	
-	@Column(name="phoneNumber")
+	@NotBlank(message = "Phone number is required")
+	@Column(name="phoneNumber", nullable = false)
     private String phoneNumber;
 	
-	@Column(name="emergency_contact_name")
+	@NotBlank(message = "Emergency contact name is required")
+	@Column(name="emergency_contact_name", nullable = false)
     private String emergencyContactName;
 	
-	@Column(name="emergency_contact_phone_number")
+	@NotBlank(message = "Emergency contact phone number is required")
+	@Column(name="emergency_contact_phone_number", nullable = false)
     private String emergencyContactPhoneNumber;                 
 	
 

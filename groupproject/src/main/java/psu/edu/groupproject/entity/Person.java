@@ -1,9 +1,4 @@
 package psu.edu.groupproject.entity;
-/* HCDD 411 Group Project 
-* Person.java
-* 04/19/2025
-*/
-
 
 import java.sql.Date;
 
@@ -20,64 +15,64 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="employees")
+@Table(name = "employees")
 public class Person {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="employee_id")
-    private int employeeId; // unique employee_ID
-	
-	@NotBlank(message = "Last name is required")
-	@Size(max = 50)
-	@Column(name="last_name", nullable = false)
-	private String lastName; // employee name field
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "employee_id")
+    private int employeeId;
 
-	@NotBlank(message = "First name is required")
-	@Size(max = 50)
-	@Column(name="first_name", nullable = false)
-	private String firstName; // employee name field
-	
-	@NotNull(message = "Salary is required")
-	@Column(name="salary", nullable = false)
-	 private Double salary; // use Double to allow null
-	
-	@NotBlank(message = "Start date is required")
-	@PastOrPresent(message = "Start date cannot be in the future")
-	@Column(name="start_date", nullable = false)
-	private Date startDate; // employment start date 
-	
-	@NotNull(message = "Status of contract is required")
-	@Column(name="employee_contract_signed", nullable = false)
-	private Boolean employeeContractSigned; // shows if employer has signed contract 
-	
-	@NotNull(message = "SSN is required")
-	@Column(name="social_security_number", nullable = false)
-	private String socialSecurityNumber; // social security number
-	
-	@NotNull(message = "Birthday is required")
-	@Past(message = "Birthdate must be in the past")
-	@Column(name="birthday", nullable = false)
-    private Date birthday; // unique employee_ID 
-	
-	@NotBlank(message = "Phone number is required")
-	@Column(name="phoneNumber", nullable = false)
+    @NotBlank(message = "Last name is required")
+    @Size(max = 50)
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @NotBlank(message = "First name is required")
+    @Size(max = 50)
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @NotNull(message = "Salary is required")
+    @Column(name = "salary", nullable = false)
+    private Double salary;
+
+    @NotNull(message = "Start date is required")
+    @PastOrPresent(message = "Start date cannot be in the future")
+    @Column(name = "start_date", nullable = false)
+    private Date startDate;
+
+    @NotNull(message = "Status of contract is required")
+    @Column(name = "employee_contract_signed", nullable = false)
+    private Boolean employeeContractSigned;
+
+    @NotBlank(message = "SSN is required")
+    @Column(name = "social_security_number", nullable = false)
+    private String socialSecurityNumber;
+
+    @NotNull(message = "Birthday is required")
+    @Past(message = "Birthdate must be in the past")
+    @Column(name = "birthday", nullable = false)
+    private Date birthday;
+
+    @NotBlank(message = "Phone number is required")
+    @Column(name = "phoneNumber", nullable = false)
     private String phoneNumber;
-	
-	@NotBlank(message = "Emergency contact name is required")
-	@Column(name="emergency_contact_name", nullable = false)
-    private String emergencyContactName;
-	
-	@NotBlank(message = "Emergency contact phone number is required")
-	@Column(name="emergency_contact_phone_number", nullable = false)
-    private String emergencyContactPhoneNumber;                 
-	
 
-    // full constructor (optional)
+    @NotBlank(message = "Emergency contact name is required")
+    @Column(name = "emergency_contact_name", nullable = false)
+    private String emergencyContactName;
+
+    @NotBlank(message = "Emergency contact phone number is required")
+    @Column(name = "emergency_contact_phone_number", nullable = false)
+    private String emergencyContactPhoneNumber;
+
+    public Person() {
+    }
+
     public Person(int employeeId, String lastName, String firstName, Double salary, Date startDate,
                   Boolean employeeContractSigned, String socialSecurityNumber, Date birthday,
                   String phoneNumber, String emergencyContactName, String emergencyContactPhoneNumber) {
-
         this.employeeId = employeeId;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -90,93 +85,92 @@ public class Person {
         this.emergencyContactName = emergencyContactName;
         this.emergencyContactPhoneNumber = emergencyContactPhoneNumber;
     }
-	// Getters & Setters
 
-	public int getEmployeeId() {
-		return employeeId;
-	}
+    public int getEmployeeId() {
+        return employeeId;
+    }
 
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
-	}
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public Double getSalary() {
-		return salary;
-	}
+    public Double getSalary() {
+        return salary;
+    }
 
-	public void setSalary(Double salary) {
-		this.salary = salary;
-	}
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public Boolean getEmployeeContractSigned() {
-		return employeeContractSigned;
-	}
+    public Boolean getEmployeeContractSigned() {
+        return employeeContractSigned;
+    }
 
-	public void setEmployeeContractSigned(Boolean employeeContractSigned) {
-		this.employeeContractSigned = employeeContractSigned;
-	}
+    public void setEmployeeContractSigned(Boolean employeeContractSigned) {
+        this.employeeContractSigned = employeeContractSigned;
+    }
 
-	public String getSocialSecurityNumber() {
-		return socialSecurityNumber;
-	}
+    public String getSocialSecurityNumber() {
+        return socialSecurityNumber;
+    }
 
-	public void setSocialSecurityNumber(String socialSecurityNumber) {
-		this.socialSecurityNumber = socialSecurityNumber;
-	}
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
+    }
 
-	public Date getBirthday() {
-		return birthday;
-	}
+    public Date getBirthday() {
+        return birthday;
+    }
 
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-	public String getEmergencyContactName() {
-		return emergencyContactName;
-	}
+    public String getEmergencyContactName() {
+        return emergencyContactName;
+    }
 
-	public void setEmergencyContactName(String emergencyContactName) {
-		this.emergencyContactName = emergencyContactName;
-	}
+    public void setEmergencyContactName(String emergencyContactName) {
+        this.emergencyContactName = emergencyContactName;
+    }
 
-	public String getEmergencyContactPhoneNumber() {
-		return emergencyContactPhoneNumber;
-	}
+    public String getEmergencyContactPhoneNumber() {
+        return emergencyContactPhoneNumber;
+    }
 
-	public void setEmergencyContactPhoneNumber(String emergencyContactPhoneNumber) {
-		this.emergencyContactPhoneNumber = emergencyContactPhoneNumber;
-	}
+    public void setEmergencyContactPhoneNumber(String emergencyContactPhoneNumber) {
+        this.emergencyContactPhoneNumber = emergencyContactPhoneNumber;
+    }
 }

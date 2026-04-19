@@ -23,7 +23,7 @@ public class GroupProjectSecurityConfig {
         http.authorizeHttpRequests(configurer ->
             configurer
                 .requestMatchers("/").hasAnyRole("SUPERVISOR", "MANAGER", "ADMIN")
-                .requestMatchers("/employees/list").hasAnyRole("EMPLOYEE", "MANAGER", "ADMIN")
+                .requestMatchers("/employees/list").hasAnyRole("SUPERVISOR", "MANAGER", "ADMIN")
                 .requestMatchers("/employees/showFormForAdd").hasAnyRole("MANAGER", "ADMIN")
                 .requestMatchers("/employees/showFormForUpdate").hasAnyRole("MANAGER", "ADMIN")
                 .requestMatchers("/employees/save").hasAnyRole("MANAGER", "ADMIN")

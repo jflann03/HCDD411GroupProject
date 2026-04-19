@@ -13,9 +13,9 @@ INSERT INTO users (username, password, enabled) VALUES
 
  
 INSERT INTO authorities (username, authority) VALUES
-    ('james', 'ROLE_EMPLOYEE'),
+    ('james', 'ROLE_SUPERVISOR'),
     ('maria', 'ROLE_MANAGER'),
-    ('david', 'ROLE_DIRECTOR'),
+    ('david', 'ROLE_MANAGER'),
     ('sarah', 'ROLE_ADMIN');
  
  

@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Employee Directory – Jupiter Company</title>
     <style>
-        /* ── Search input (not in base CSS) ── */
         .search-input {
             padding: 11px 14px 11px 38px;
             border: 1px solid var(--border);
@@ -17,7 +16,6 @@
             font-size: 0.95rem;
             color: var(--text);
             width: 260px;
-            position: relative;
             outline: none;
             transition: border-color 0.15s, box-shadow 0.15s;
         }
@@ -31,18 +29,13 @@
         .search-wrap svg {
             position: absolute; left: 12px; top: 50%;
             transform: translateY(-50%); pointer-events: none;
-            color: #a0b4c8;
         }
-
-        /* ── Stat cards row (3-col from CSS, we want 4) ── */
         .stats-grid-4 {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 18px;
             margin-top: 22px;
         }
-
-        /* ── Contract badges ── */
         .badge-yes {
             display: inline-flex; align-items: center;
             padding: 6px 12px; border-radius: 999px;
@@ -55,8 +48,6 @@
             background: var(--danger-soft); color: var(--danger);
             font-weight: 700; font-size: 0.85rem;
         }
-
-        /* ── Confirm delete modal ── */
         .modal-overlay {
             display: none; position: fixed; inset: 0;
             background: rgba(22, 41, 77, 0.45);
@@ -76,31 +67,24 @@
         .modal-box h3 { color: #17355f; margin-bottom: 10px; font-size: 1.1rem; }
         .modal-box p  { color: var(--muted); font-size: 0.93rem; margin-bottom: 24px; }
         .modal-actions { display: flex; gap: 10px; justify-content: center; }
-
-        /* ── Responsive tweak ── */
-        @media (max-width: 900px) {
-            .stats-grid-4 { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 560px) {
-            .stats-grid-4 { grid-template-columns: 1fr; }
-            .search-input { width: 100%; }
-        }
+        @media (max-width: 900px) { .stats-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px)  { .stats-grid-4 { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="page-shell">
 
-    <!-- ── Top banner ── -->
     <div class="top-banner">
         <div>
             <p class="eyebrow">Jupiter Company &mdash; HR Portal</p>
             <h1 style="font-size:2rem; margin-bottom:10px;">Employee Directory</h1>
             <p class="subtitle" style="margin-bottom:0;">
-                Manage and review all Jupiter Company staff records.
+                <span sec:authorize="hasRole('ROLE_SUPERVISOR')">You have view-only access to employee records.</span>
+                <span sec:authorize="hasRole('ROLE_MANAGER')">You can view, add, and edit employee records.</span>
+                <span sec:authorize="hasRole('ROLE_ADMIN')">You have full access including delete.</span>
             </p>
         </div>
-        <!-- Decorative plane icon -->
         <svg width="90" height="90" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
             <ellipse cx="40" cy="40" rx="36" ry="36" fill="rgba(255,255,255,0.07)"
                      stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
@@ -111,43 +95,39 @@
         </svg>
     </div>
 
-    <!-- ── Stat cards ── -->
     <div class="stats-grid-4">
         <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Total employees</span>
+            <span class="stat-label">Total Employees</span>
             <h2 th:text="${#lists.size(employees)}">0</h2>
             <p>Active staff records</p>
         </div>
         <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Contracts signed</span>
+            <span class="stat-label">Contracts Signed</span>
             <h2 style="color:#1d8f4d;"
                 th:text="${#lists.size(employees.?[employeeContractSigned == true])}">0</h2>
             <p>Employees with signed contracts</p>
         </div>
         <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Pending contracts</span>
+            <span class="stat-label">Pending Contracts</span>
             <h2 style="color:#c07a1a;"
                 th:text="${#lists.size(employees.?[employeeContractSigned == false || employeeContractSigned == null])}">0</h2>
             <p>Contracts not yet signed</p>
         </div>
         <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Avg. start salary</span>
+            <span class="stat-label">Avg. Start Salary</span>
             <h2 style="color:#15335b;">—</h2>
             <p>Across all employees</p>
         </div>
     </div>
 
-    <!-- ── Employee table card ── -->
     <div class="employee-table-card">
 
-        <!-- Table top toolbar -->
         <div class="table-top">
             <div>
                 <h2>All Employees</h2>
-                <p class="table-subtitle">Click Edit to update a record, or use the search to filter.</p>
             </div>
             <div class="button-row">
-                <!-- Search -->
+
                 <div class="search-wrap">
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                         <circle cx="6.5" cy="6.5" r="5" stroke="#a0b4c8" stroke-width="1.4"/>
@@ -157,16 +137,15 @@
                            placeholder="Search employees…" onkeyup="filterTable()">
                 </div>
 
-                <!-- Add employee — managers and admins only -->
-                <a sec:authorize="hasAnyRole('MANAGER','ADMIN')"
+                <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
                    th:href="@{/employees/showFormForAdd}"
                    class="primary-btn">
                     + Add Employee
                 </a>
+
             </div>
         </div>
 
-        <!-- Table -->
         <div class="table-wrap">
             <table class="employee-table" id="employeeTable">
                 <thead>
@@ -180,13 +159,13 @@
                         <th>Phone</th>
                         <th>Emerg. Contact</th>
                         <th>Emerg. Phone</th>
-                        <th sec:authorize="hasAnyRole('MANAGER','ADMIN')">Actions</th>
+
+                        <th sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="employee : ${employees}">
 
-                        <!-- Name + ID with avatar -->
                         <td>
                             <div class="employee-person">
                                 <div class="avatar-circle"
@@ -204,9 +183,7 @@
                             </div>
                         </td>
 
-                        <td>
-                            <span class="badge-soft" th:text="${employee.startDate}"></span>
-                        </td>
+                        <td><span class="badge-soft" th:text="${employee.startDate}"></span></td>
 
                         <td>
                             <span class="money-pill"
@@ -219,25 +196,24 @@
                             <span th:unless="${employee.employeeContractSigned}" class="badge-no">&#10007; No</span>
                         </td>
 
-                        <td>
-                            <span class="dept-pill" th:text="${employee.socialSecurityNumber}"></span>
-                        </td>
-
+                        <td><span class="dept-pill" th:text="${employee.socialSecurityNumber}"></span></td>
                         <td th:text="${employee.birthday}"></td>
                         <td th:text="${employee.phoneNumber}"></td>
                         <td th:text="${employee.emergencyContactName}"></td>
                         <td th:text="${employee.emergencyContactPhoneNumber}"></td>
 
-                        <!-- Actions: edit (manager+admin), delete (admin only) -->
-                        <td sec:authorize="hasAnyRole('MANAGER','ADMIN')">
+]
+                        <td sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
                             <div class="button-row compact-row">
-                                <a sec:authorize="hasAnyRole('MANAGER','ADMIN')"
+
+                                <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
                                    th:href="@{/employees/showFormForUpdate(employeeId=${employee.employeeId})}"
                                    class="secondary-btn"
                                    style="padding:8px 14px; font-size:0.85rem; border-radius:10px;">
                                     Edit
                                 </a>
-                                <button sec:authorize="hasRole('ADMIN')"
+
+                                <button sec:authorize="hasRole('ROLE_ADMIN')"
                                         class="danger-btn"
                                         style="padding:8px 14px; font-size:0.85rem; border-radius:10px; border:none; cursor:pointer;"
                                         th:attr="onclick='openDeleteModal('
@@ -249,17 +225,18 @@
                                                  + '\')'">
                                     Delete
                                 </button>
+
                             </div>
                         </td>
+
                     </tr>
 
-                    <!-- Empty state -->
                     <tr class="empty-row" th:if="${#lists.isEmpty(employees)}">
                         <td colspan="10">
                             <div class="empty-state">
                                 <h3>No employees found</h3>
                                 <p>Add your first employee record to get started.</p>
-                                <a sec:authorize="hasAnyRole('MANAGER','ADMIN')"
+                                <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
                                    th:href="@{/employees/showFormForAdd}"
                                    class="primary-btn">
                                     + Add Employee
@@ -271,7 +248,7 @@
             </table>
         </div>
 
-        <!-- Footer row -->
+        <!-- Footer -->
         <div class="info-strip" style="margin-top:16px;">
             <span>
                 <span class="info-label">Showing</span>
@@ -288,7 +265,6 @@
     </div>
 </div>
 
-<!-- ── Delete confirmation modal ── -->
 <div class="modal-overlay" id="deleteModal">
     <div class="modal-box">
         <h3>Delete Employee?</h3>
@@ -332,7 +308,6 @@
         document.getElementById('deleteModal').classList.remove('open');
     }
 
-    // Close modal when clicking outside the box
     document.getElementById('deleteModal').addEventListener('click', function(e) {
         if (e.target === this) closeDeleteModal();
     });

@@ -1,91 +1,140 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<!-- method for validatiing text boxes, checks all the text boxes on this page and if ANY of them are empty, does not let the user go forward...-->
-	<script>
-		function validateAllBoxes() {
-		  let form = document.forms["employeeForm"];
-		  if (form["firstName"].value == "" || form["lastName"].value == "" || form["salary"].value == "" || 
-			form["startDate"].value == "" || form["employeeContractSigned"].value == "" || form["socialSecurityNumber"].value == "" 
-			|| form["birthday"].value == "" || form["phoneNumber"].value == "" || form["emergencyContactName"].value == "" 
-			|| form["emergencyContactPhoneNumber"].value == "" ){
-		    alert("One of more boxes are empty, please fill out all boxes to continue forward.");
-		    return false;
-		  }
-		}
-		</script>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Save Employee</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
-    <title>Save Employee</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
 
 <body>
+	<div class="container py-4">
 
-    <div class="container">
+		<h2 class="mb-1">Employee Directory</h2>
+		<p class="text-muted mb-4">Add or update an employee record</p>
 
-        <h3>Employee Directory</h3>
-        <hr>
+		<div class="card shadow-sm">
+			<div class="card-body p-4">
 
-        <p class="h4 mb-4">Save Employee</p>
+				<h4 class="mb-4">Save Employee</h4>
 
-		<form name="employeeForm" 
-		      th:action="@{/employees/save}" 
-		      th:object="${employee}" 
-		      onsubmit="return validateAllBoxes()" 
-		      method="POST">
-		
-		<!-- Add hidden form to handle update-->
-		
-		<input type="hidden" th:field="*{employeeId}" />
+				<form th:action="@{/employees/save}" th:object="${employee}" method="POST">
 
-            <input type="text" th:field="*{firstName}"
-                   class="form-control mb-4 w-25" placeholder="First Name">
+					<!-- Hidden field for updates -->
+					<input type="hidden" th:field="*{employeeId}" />
 
-            <input type="text" th:field="*{lastName}"
-                   class="form-control mb-4 w-25" placeholder="Last Name">
+					<!-- Global error message -->
+					<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+						Please fix the errors below and try again.
+					</div>
 
-            <input type="number" th:field="*{salary}"
-                   class="form-control mb-4 w-25" placeholder="Salary">
-		
-			<input type="date" th:field="*{startDate}"
-				   class="form-control mb-4 w-25" placeholder="Start Date">
-			<label>
-				Employee Contract Signed?
-			</label>	   
-			<input type="checkbox" th:field="*{employeeContractSigned}"
-				   class="form-control mb-4 w-25" placeholder="Employee Contract Signed?">
-				   
-			<input type="text" th:field="*{socialSecurityNumber}"
-				   class="form-control mb-4 w-25" placeholder="Social Security Number">
-			
-			<input type="date" th:field="*{birthday}"
-				   	class="form-control mb-4 w-25" placeholder="Birthday">
-					
-			<input type="text" th:field="*{phoneNumber}"
-				   class="form-control mb-4 w-25" placeholder="Phone Number">
-				   
-			<input type="text" th:field="*{emergencyContactName}"
-				   class="form-control mb-4 w-25" placeholder="Emergency Contact Name">
-				   
-			<input type="text" th:field="*{emergencyContactPhoneNumber}"
-				   class="form-control mb-4 w-25" placeholder="Emergency Contact Phone Number">
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="firstName" class="form-label">First Name</label>
+							<input type="text" id="firstName" th:field="*{firstName}" class="form-control"
+								placeholder="Enter first name">
+							<div class="text-danger mt-1" th:if="${#fields.hasErrors('firstName')}"
+								th:errors="*{firstName}"></div>
+						</div>
 
-            <button type="submit" class="btn btn-info col-2">Save</button>
+						<div class="col-md-6 mb-3">
+							<label for="lastName" class="form-label">Last Name</label>
+							<input type="text" id="lastName" th:field="*{lastName}" class="form-control"
+								placeholder="Enter last name">
+							<div class="text-danger mt-1" th:if="${#fields.hasErrors('lastName')}"
+								th:errors="*{lastName}"></div>
+						</div>
+					</div>
 
-        </form>
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="salary" class="form-label">Start Salary</label>
+							<input type="number" step="0.01" min="0" id="salary" th:field="*{salary}"
+								class="form-control" placeholder="Enter start salary">
+							<div class="text-danger mt-1" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">
+							</div>
+						</div>
 
-        <hr>
-        <a th:href="@{/employees/list}">Back to Employees List</a>
+						<div class="col-md-6 mb-3">
+							<label for="startDate" class="form-label">Start Date</label>
+							<input type="date" id="startDate" th:field="*{startDate}" class="form-control">
+							<div class="text-danger mt-1" th:if="${#fields.hasErrors('startDate')}"
+								th:errors="*{startDate}"></div>
+						</div>
+					</div>
 
-    </div>
+					<div class="mb-3">
+						<label class="form-label d-block">Employee Contract Signed?</label>
 
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" id="contractYes"
+								th:field="*{employeeContractSigned}" value="true">
+							<label class="form-check-label" for="contractYes">Yes</label>
+						</div>
 
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" id="contractNo"
+								th:field="*{employeeContractSigned}" value="false">
+							<label class="form-check-label" for="contractNo">No</label>
+						</div>
+
+						<div class="text-danger mt-1" th:if="${#fields.hasErrors('employeeContractSigned')}"
+							th:errors="*{employeeContractSigned}"></div>
+					</div>
+
+					<div class="mb-3">
+						<label for="socialSecurityNumber" class="form-label">Social Security Number</label>
+						<input type="text" id="socialSecurityNumber" th:field="*{socialSecurityNumber}"
+							class="form-control" placeholder="Enter SSN">
+						<div class="text-danger mt-1" th:if="${#fields.hasErrors('socialSecurityNumber')}"
+							th:errors="*{socialSecurityNumber}"></div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="birthday" class="form-label">Birthdate</label>
+							<input type="date" id="birthday" th:field="*{birthday}" class="form-control">
+							<div class="text-danger mt-1" th:if="${#fields.hasErrors('birthday')}"
+								th:errors="*{birthday}"></div>
+						</div>
+
+						<div class="col-md-6 mb-3">
+							<label for="phoneNumber" class="form-label">Phone Number</label>
+							<input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control"
+								placeholder="Enter phone number">
+							<div class="text-danger mt-1" th:if="${#fields.hasErrors('phoneNumber')}"
+								th:errors="*{phoneNumber}"></div>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="emergencyContactName" class="form-label">Emergency Contact Name</label>
+						<input type="text" id="emergencyContactName" th:field="*{emergencyContactName}"
+							class="form-control" placeholder="Enter emergency contact name">
+						<div class="text-danger mt-1" th:if="${#fields.hasErrors('emergencyContactName')}"
+							th:errors="*{emergencyContactName}"></div>
+					</div>
+
+					<div class="mb-4">
+						<label for="emergencyContactPhoneNumber" class="form-label">Emergency Contact Phone
+							Number</label>
+						<input type="text" id="emergencyContactPhoneNumber" th:field="*{emergencyContactPhoneNumber}"
+							class="form-control" placeholder="Enter emergency contact phone number">
+						<div class="text-danger mt-1" th:if="${#fields.hasErrors('emergencyContactPhoneNumber')}"
+							th:errors="*{emergencyContactPhoneNumber}"></div>
+					</div>
+
+					<div class="d-flex gap-2">
+						<button type="submit" class="btn btn-primary">Save Employee</button>
+						<a th:href="@{/employees/list}" class="btn btn-secondary">Back to Employee List</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>

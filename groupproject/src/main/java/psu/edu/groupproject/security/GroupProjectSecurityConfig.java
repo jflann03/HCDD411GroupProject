@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class GroupProjectSecurityConfig {
 
+
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         return new JdbcUserDetailsManager(dataSource);
@@ -22,6 +23,7 @@ public class GroupProjectSecurityConfig {
 
         http.authorizeHttpRequests(configurer ->
             configurer
+
                 .requestMatchers("/").hasAnyRole("SUPERVISOR", "MANAGER", "ADMIN")
                 .requestMatchers("/employees/list").hasAnyRole("SUPERVISOR", "MANAGER", "ADMIN")
                 .requestMatchers("/employees/showFormForAdd").hasAnyRole("MANAGER", "ADMIN")

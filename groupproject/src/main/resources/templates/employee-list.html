@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,42 +18,73 @@
             outline: none;
             transition: border-color 0.15s, box-shadow 0.15s;
         }
+
         .search-input:focus {
             border-color: #7fdce6;
             box-shadow: 0 0 0 4px rgba(89, 197, 210, 0.15);
             background: white;
         }
-        .search-input::placeholder { color: #a0b4c8; }
-        .search-wrap { position: relative; display: inline-block; }
-        .search-wrap svg {
-            position: absolute; left: 12px; top: 50%;
-            transform: translateY(-50%); pointer-events: none;
+
+        .search-input::placeholder {
+            color: #a0b4c8;
         }
+
+        .search-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .search-wrap svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
         .stats-grid-4 {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 18px;
             margin-top: 22px;
         }
+
         .badge-yes {
-            display: inline-flex; align-items: center;
-            padding: 6px 12px; border-radius: 999px;
-            background: #eafaf2; color: #237449;
-            font-weight: 700; font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #eafaf2;
+            color: #237449;
+            font-weight: 700;
+            font-size: 0.85rem;
         }
+
         .badge-no {
-            display: inline-flex; align-items: center;
-            padding: 6px 12px; border-radius: 999px;
-            background: var(--danger-soft); color: var(--danger);
-            font-weight: 700; font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: var(--danger-soft);
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 0.85rem;
         }
+
         .modal-overlay {
-            display: none; position: fixed; inset: 0;
+            display: none;
+            position: fixed;
+            inset: 0;
             background: rgba(22, 41, 77, 0.45);
             z-index: 200;
-            align-items: center; justify-content: center;
+            align-items: center;
+            justify-content: center;
         }
-        .modal-overlay.open { display: flex; }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
         .modal-box {
             background: white;
             border: 1px solid var(--border);
@@ -64,254 +94,306 @@
             width: 380px;
             text-align: center;
         }
-        .modal-box h3 { color: #17355f; margin-bottom: 10px; font-size: 1.1rem; }
-        .modal-box p  { color: var(--muted); font-size: 0.93rem; margin-bottom: 24px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: center; }
-        @media (max-width: 900px) { .stats-grid-4 { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 560px)  { .stats-grid-4 { grid-template-columns: 1fr; } }
+
+        .modal-box h3 {
+            color: #17355f;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .modal-box p {
+            color: var(--muted);
+            font-size: 0.93rem;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .banner-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            display: block;
+            flex-shrink: 0;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-btn {
+            padding: 11px 18px;
+            border-radius: 12px;
+            border: 1px solid #f2c6cc;
+            background: #fff7f8;
+            color: #b54757;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.15s;
+        }
+
+        .logout-btn:hover {
+            background: #ffeef1;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 560px) {
+            .stats-grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="page-shell">
+    <div class="page-shell">
 
-    <div class="top-banner">
-        <div>
-            <p class="eyebrow">Jupiter Company &mdash; HR Portal</p>
-            <h1 style="font-size:2rem; margin-bottom:10px;">Employee Directory</h1>
-            <p class="subtitle" style="margin-bottom:0;">
-                <span sec:authorize="hasRole('ROLE_SUPERVISOR')">You have view-only access to employee records.</span>
-                <span sec:authorize="hasRole('ROLE_MANAGER')">You can view, add, and edit employee records.</span>
-                <span sec:authorize="hasRole('ROLE_ADMIN')">You have full access including delete.</span>
-            </p>
-        </div>
-        <svg width="90" height="90" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="40" cy="40" rx="36" ry="36" fill="rgba(255,255,255,0.07)"
-                     stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
-            <path d="M16 44 Q30 32 42 40 Q54 48 64 36"
-                  fill="none" stroke="#9aeaf3" stroke-width="2" stroke-linecap="round"/>
-            <path d="M42 40 L52 28 L57 31 L47 43Z" fill="#9aeaf3" opacity="0.85"/>
-            <circle cx="42" cy="40" r="3.5" fill="white" opacity="0.9"/>
-        </svg>
-    </div>
-
-    <div class="stats-grid-4">
-        <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Total Employees</span>
-            <h2 th:text="${#lists.size(employees)}">0</h2>
-            <p>Active staff records</p>
-        </div>
-        <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Contracts Signed</span>
-            <h2 style="color:#1d8f4d;"
-                th:text="${#lists.size(employees.?[employeeContractSigned == true])}">0</h2>
-            <p>Employees with signed contracts</p>
-        </div>
-        <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Pending Contracts</span>
-            <h2 style="color:#c07a1a;"
-                th:text="${#lists.size(employees.?[employeeContractSigned == false || employeeContractSigned == null])}">0</h2>
-            <p>Contracts not yet signed</p>
-        </div>
-        <div class="stat-card" style="border-radius:22px;">
-            <span class="stat-label">Avg. Start Salary</span>
-            <h2 style="color:#15335b;">—</h2>
-            <p>Across all employees</p>
-        </div>
-    </div>
-
-    <div class="employee-table-card">
-
-        <div class="table-top">
+        <div class="top-banner">
             <div>
-                <h2>All Employees</h2>
+                <p class="eyebrow">Jupiter Company &mdash; HR Portal</p>
+                <h1 style="font-size:2rem; margin-bottom:10px;">Employee Directory</h1>
+                <p class="subtitle" style="margin-bottom:0;">
+                    <span sec:authorize="hasRole('ROLE_SUPERVISOR')">You have view-only access to employee
+                        records.</span>
+                    <span sec:authorize="hasRole('ROLE_MANAGER')">You can view, add, and edit employee records.</span>
+                    <span sec:authorize="hasRole('ROLE_ADMIN')">You have full access including delete.</span>
+                </p>
             </div>
-            <div class="button-row">
 
-                <div class="search-wrap">
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                        <circle cx="6.5" cy="6.5" r="5" stroke="#a0b4c8" stroke-width="1.4"/>
-                        <path d="M11 11L13.5 13.5" stroke="#a0b4c8" stroke-width="1.4" stroke-linecap="round"/>
-                    </svg>
-                    <input class="search-input" type="text" id="searchInput"
-                           placeholder="Search employees…" onkeyup="filterTable()">
-                </div>
+            <img th:src="@{/images/AirlineLogo.svg}" src="/images/AirlineLogo.svg" alt="Airline Logo"
+                class="banner-logo">
+        </div>
 
-                <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
-                   th:href="@{/employees/showFormForAdd}"
-                   class="primary-btn">
-                    + Add Employee
-                </a>
+        <div class="stats-grid-4">
+            <div class="stat-card" style="border-radius:22px;">
+                <span class="stat-label">Total Employees</span>
+                <h2 th:text="${#lists.size(employees)}">0</h2>
+                <p>Active staff records</p>
+            </div>
+            <div class="stat-card" style="border-radius:22px;">
+                <span class="stat-label">Contracts Signed</span>
+                <h2 style="color:#1d8f4d;" th:text="${#lists.size(employees.?[employeeContractSigned == true])}">0</h2>
+                <p>Employees with signed contracts</p>
+            </div>
+            <div class="stat-card" style="border-radius:22px;">
+                <span class="stat-label">Pending Contracts</span>
+                <h2 style="color:#c07a1a;"
+                    th:text="${#lists.size(employees.?[employeeContractSigned == false || employeeContractSigned == null])}">
+                    0</h2>
+                <p>Contracts not yet signed</p>
+            </div>
+            <div class="stat-card" style="border-radius:22px;">
+                <span class="stat-label">Your Role</span>
 
+                <h2 style="color:#15335b;" sec:authorize="hasRole('ROLE_SUPERVISOR')">Supervisor</h2>
+                <h2 style="color:#15335b;" sec:authorize="hasRole('ROLE_MANAGER')">Manager</h2>
+                <h2 style="color:#15335b;" sec:authorize="hasRole('ROLE_ADMIN')">Admin</h2>
+
+                <p>Current access level</p>
             </div>
         </div>
 
-        <div class="table-wrap">
-            <table class="employee-table" id="employeeTable">
-                <thead>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Start Date</th>
-                        <th>Start Salary</th>
-                        <th>Contract</th>
-                        <th>SSN</th>
-                        <th>Birthday</th>
-                        <th>Phone</th>
-                        <th>Emerg. Contact</th>
-                        <th>Emerg. Phone</th>
+        <div class="employee-table-card">
 
-                        <th sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="employee : ${employees}">
+            <div class="table-top">
+                <div>
+                    <h2>All Employees</h2>
+                </div>
+                <div class="button-row">
 
-                        <td>
-                            <div class="employee-person">
-                                <div class="avatar-circle"
-                                     th:text="${#strings.substring(employee.firstName,0,1)
+                    <div class="search-wrap">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                            <circle cx="6.5" cy="6.5" r="5" stroke="#a0b4c8" stroke-width="1.4" />
+                            <path d="M11 11L13.5 13.5" stroke="#a0b4c8" stroke-width="1.4" stroke-linecap="round" />
+                        </svg>
+                        <input class="search-input" type="text" id="searchInput" placeholder="Search employees…"
+                            onkeyup="filterTable()">
+                    </div>
+
+                    <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')" th:href="@{/employees/showFormForAdd}"
+                        class="primary-btn">
+                        + Add Employee
+                    </a>
+
+                    <form th:action="@{/logout}" method="post" class="logout-form">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="employee-table" id="employeeTable">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Start Date</th>
+                            <th>Start Salary</th>
+                            <th>Contract</th>
+                            <th>SSN</th>
+                            <th>Birthday</th>
+                            <th>Phone</th>
+                            <th>Emerg. Contact</th>
+                            <th>Emerg. Phone</th>
+
+                            <th sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="employee : ${employees}">
+
+                            <td>
+                                <div class="employee-person">
+                                    <div class="avatar-circle" th:text="${#strings.substring(employee.firstName,0,1)
                                                + #strings.substring(employee.lastName,0,1)}">
-                                </div>
-                                <div>
-                                    <div class="employee-name"
-                                         th:text="${employee.firstName + ' ' + employee.lastName}">
                                     </div>
-                                    <div class="employee-sub"
-                                         th:text="'ID: #' + ${employee.employeeId}">
+                                    <div>
+                                        <div class="employee-name"
+                                            th:text="${employee.firstName + ' ' + employee.lastName}">
+                                        </div>
+                                        <div class="employee-sub" th:text="${'ID: #' + employee.employeeId}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
 
-                        <td><span class="badge-soft" th:text="${employee.startDate}"></span></td>
+                            <td><span class="badge-soft" th:text="${employee.startDate}"></span></td>
 
-                        <td>
-                            <span class="money-pill"
-                                  th:text="${'$' + #numbers.formatDecimal(employee.salary, 1, 'COMMA', 2, 'POINT')}">
-                            </span>
-                        </td>
+                            <td>
+                                <span class="money-pill"
+                                    th:text="${'$' + #numbers.formatDecimal(employee.salary, 1, 'COMMA', 2, 'POINT')}">
+                                </span>
+                            </td>
 
-                        <td>
-                            <span th:if="${employee.employeeContractSigned}" class="badge-yes">&#10003; Yes</span>
-                            <span th:unless="${employee.employeeContractSigned}" class="badge-no">&#10007; No</span>
-                        </td>
+                            <td>
+                                <span th:if="${employee.employeeContractSigned}" class="badge-yes">&#10003; Yes</span>
+                                <span th:unless="${employee.employeeContractSigned}" class="badge-no">&#10007; No</span>
+                            </td>
 
-                        <td><span class="dept-pill" th:text="${employee.socialSecurityNumber}"></span></td>
-                        <td th:text="${employee.birthday}"></td>
-                        <td th:text="${employee.phoneNumber}"></td>
-                        <td th:text="${employee.emergencyContactName}"></td>
-                        <td th:text="${employee.emergencyContactPhoneNumber}"></td>
+                            <td><span class="dept-pill" th:text="${employee.socialSecurityNumber}"></span></td>
+                            <td th:text="${employee.birthday}"></td>
+                            <td th:text="${employee.phoneNumber}"></td>
+                            <td th:text="${employee.emergencyContactName}"></td>
+                            <td th:text="${employee.emergencyContactPhoneNumber}"></td>
 
-]
-                        <td sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
-                            <div class="button-row compact-row">
+                            <td sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+                                <div class="button-row compact-row">
 
-                                <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
-                                   th:href="@{/employees/showFormForUpdate(employeeId=${employee.employeeId})}"
-                                   class="secondary-btn"
-                                   style="padding:8px 14px; font-size:0.85rem; border-radius:10px;">
-                                    Edit
-                                </a>
+                                    <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
+                                        th:href="@{/employees/showFormForUpdate(employeeId=${employee.employeeId})}"
+                                        class="secondary-btn"
+                                        style="padding:8px 14px; font-size:0.85rem; border-radius:10px;">
+                                        Edit
+                                    </a>
 
-                                <button sec:authorize="hasRole('ROLE_ADMIN')"
-                                        class="danger-btn"
+                                    <button sec:authorize="hasRole('ROLE_ADMIN')" class="danger-btn"
                                         style="padding:8px 14px; font-size:0.85rem; border-radius:10px; border:none; cursor:pointer;"
                                         th:attr="onclick='openDeleteModal('
                                                  + ${employee.employeeId}
-                                                 + ', \''
+                                                 + ', \'' 
                                                  + ${employee.firstName}
                                                  + ' '
                                                  + ${employee.lastName}
                                                  + '\')'">
-                                    Delete
-                                </button>
+                                        Delete
+                                    </button>
 
-                            </div>
-                        </td>
+                                </div>
+                            </td>
 
-                    </tr>
+                        </tr>
 
-                    <tr class="empty-row" th:if="${#lists.isEmpty(employees)}">
-                        <td colspan="10">
-                            <div class="empty-state">
-                                <h3>No employees found</h3>
-                                <p>Add your first employee record to get started.</p>
-                                <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
-                                   th:href="@{/employees/showFormForAdd}"
-                                   class="primary-btn">
-                                    + Add Employee
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        <tr class="empty-row" th:if="${#lists.isEmpty(employees)}">
+                            <td colspan="10">
+                                <div class="empty-state">
+                                    <h3>No employees found</h3>
+                                    <p>Add your first employee record to get started.</p>
+                                    <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
+                                        th:href="@{/employees/showFormForAdd}" class="primary-btn">
+                                        + Add Employee
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-strip" style="margin-top:16px;">
+                <span>
+                    <span class="info-label">Showing</span>
+                    <strong id="footerCount" th:text="${#lists.size(employees)} + ' employee(s)'">
+                    </strong>
+                </span>
+                <a th:href="@{/}" class="secondary-btn"
+                    style="padding:9px 16px; font-size:0.88rem; border-radius:12px;">
+                    &#8592; Back to Home
+                </a>
+            </div>
+
         </div>
-
-        <!-- Footer -->
-        <div class="info-strip" style="margin-top:16px;">
-            <span>
-                <span class="info-label">Showing</span>
-                <strong id="footerCount"
-                        th:text="${#lists.size(employees)} + ' employee(s)'">
-                </strong>
-            </span>
-            <a th:href="@{/}" class="secondary-btn"
-               style="padding:9px 16px; font-size:0.88rem; border-radius:12px;">
-                &#8592; Back to Home
-            </a>
-        </div>
-
     </div>
-</div>
 
-<div class="modal-overlay" id="deleteModal">
-    <div class="modal-box">
-        <h3>Delete Employee?</h3>
-        <p id="deleteModalMsg">This action cannot be undone.</p>
-        <div class="modal-actions">
-            <button class="secondary-btn" onclick="closeDeleteModal()"
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <h3>Delete Employee?</h3>
+            <p id="deleteModalMsg">This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="secondary-btn" onclick="closeDeleteModal()"
                     style="border-radius:12px; padding:10px 20px;">
-                Cancel
-            </button>
-            <a id="deleteConfirmBtn" href="#" class="danger-btn"
-               style="border-radius:12px; padding:10px 20px; font-weight:700;">
-                Yes, Delete
-            </a>
+                    Cancel
+                </button>
+                <a id="deleteConfirmBtn" href="#" class="danger-btn"
+                    style="border-radius:12px; padding:10px 20px; font-weight:700;">
+                    Yes, Delete
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    function filterTable() {
-        const input = document.getElementById('searchInput').value.toLowerCase();
-        const rows  = document.querySelectorAll('#employeeTable tbody tr:not(.empty-row)');
-        let visible = 0;
-        rows.forEach(function(row) {
-            const match = row.textContent.toLowerCase().includes(input);
-            row.style.display = match ? '' : 'none';
-            if (match) visible++;
+    <script>
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#employeeTable tbody tr:not(.empty-row)');
+            let visible = 0;
+            rows.forEach(function (row) {
+                const match = row.textContent.toLowerCase().includes(input);
+                row.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            document.getElementById('footerCount').textContent =
+                visible + ' of ' + rows.length + ' employee(s)';
+        }
+
+        function openDeleteModal(empId, empName) {
+            document.getElementById('deleteModalMsg').textContent =
+                'Are you sure you want to delete ' + empName + '? This cannot be undone.';
+            document.getElementById('deleteConfirmBtn').href =
+                '/employees/delete?employeeId=' + empId;
+            document.getElementById('deleteModal').classList.add('open');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('open');
+        }
+
+        document.getElementById('deleteModal').addEventListener('click', function (e) {
+            if (e.target === this) closeDeleteModal();
         });
-        document.getElementById('footerCount').textContent =
-            visible + ' of ' + rows.length + ' employee(s)';
-    }
-
-    function openDeleteModal(empId, empName) {
-        document.getElementById('deleteModalMsg').textContent =
-            'Are you sure you want to delete ' + empName + '? This cannot be undone.';
-        document.getElementById('deleteConfirmBtn').href =
-            '/employees/delete?employeeId=' + empId;
-        document.getElementById('deleteModal').classList.add('open');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('open');
-    }
-
-    document.getElementById('deleteModal').addEventListener('click', function(e) {
-        if (e.target === this) closeDeleteModal();
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

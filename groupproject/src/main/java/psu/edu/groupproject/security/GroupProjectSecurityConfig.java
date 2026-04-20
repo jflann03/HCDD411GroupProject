@@ -23,7 +23,8 @@ public class GroupProjectSecurityConfig {
 
         http.authorizeHttpRequests(configurer ->
             configurer
-
+                .requestMatchers("/css/**", "/images/**").permitAll()
+                .requestMatchers("/showLoginPage", "/access-denied").permitAll()
                 .requestMatchers("/").hasAnyRole("SUPERVISOR", "MANAGER", "ADMIN")
                 .requestMatchers("/employees/list").hasAnyRole("SUPERVISOR", "MANAGER", "ADMIN")
                 .requestMatchers("/employees/showFormForAdd").hasAnyRole("MANAGER", "ADMIN")

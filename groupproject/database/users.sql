@@ -4,20 +4,16 @@
 --    Username = first name, Password = test123
  
 INSERT INTO users (username, password, enabled) VALUES
-    ('james', '{bcrypt}$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', TRUE),
-    ('maria', '{bcrypt}$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AKntjAW', TRUE),
-    ('david', '{bcrypt}$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', TRUE),
-    ('sarah', '{bcrypt}$2a$10$EblZqNptyYvcLm/VwDCVAuBjzZOI7khzdyGPBr08PpIi0na624b8.', TRUE);
- 
- 
-
+    ('james', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE),
+    ('maria', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE),
+    ('david', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE),
+    ('sarah', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe.', TRUE);
  
 INSERT INTO authorities (username, authority) VALUES
     ('james', 'ROLE_SUPERVISOR'),
     ('maria', 'ROLE_MANAGER'),
     ('david', 'ROLE_MANAGER'),
     ('sarah', 'ROLE_ADMIN');
- 
  
 INSERT INTO employees (
     first_name,

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Employee Directory – Jupiter Company</title>
+
     <style>
         .search-input {
             padding: 11px 14px 11px 38px;
@@ -142,6 +143,27 @@
             transform: translateY(-1px);
         }
 
+        .login-info {
+            margin-top: 10px;
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .login-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: #eef7fb;
+            color: #17355f;
+            font-weight: 700;
+            border: 1px solid #d8edf5;
+        }
+
         @media (max-width: 900px) {
             .stats-grid-4 {
                 grid-template-columns: repeat(2, 1fr);
@@ -163,13 +185,27 @@
         <div class="top-banner">
             <div>
                 <p class="eyebrow">Jupiter Company &mdash; HR Portal</p>
+
                 <h1 style="font-size:2rem; margin-bottom:10px;">Employee Directory</h1>
+
                 <p class="subtitle" style="margin-bottom:0;">
-                    <span sec:authorize="hasRole('ROLE_SUPERVISOR')">You have view-only access to employee
-                        records.</span>
-                    <span sec:authorize="hasRole('ROLE_MANAGER')">You can view, add, and edit employee records.</span>
-                    <span sec:authorize="hasRole('ROLE_ADMIN')">You have full access including delete.</span>
+                    <span sec:authorize="hasRole('SUPERVISOR')">
+                        You have view-only access to employee records.
+                    </span>
+
+                    <span sec:authorize="hasRole('MANAGER')">
+                        You can view, add, and edit employee records.
+                    </span>
+
+                    <span sec:authorize="hasRole('ADMIN')">
+                        You have full access including delete.
+                    </span>
                 </p>
+
+                <div class="login-info">
+                    <span>Logged in as</span>
+                    <span class="login-pill" sec:authentication="name">username</span>
+                </div>
             </div>
 
             <img th:src="@{/images/AirlineLogo.svg}" src="/images/AirlineLogo.svg" alt="Airline Logo"
@@ -177,32 +213,42 @@
         </div>
 
         <div class="stats-grid-4">
+
             <div class="stat-card" style="border-radius:22px;">
                 <span class="stat-label">Total Employees</span>
                 <h2 th:text="${#lists.size(employees)}">0</h2>
                 <p>Active staff records</p>
             </div>
+
             <div class="stat-card" style="border-radius:22px;">
                 <span class="stat-label">Contracts Signed</span>
-                <h2 style="color:#1d8f4d;" th:text="${#lists.size(employees.?[employeeContractSigned == true])}">0</h2>
+                <h2 style="color:#1d8f4d;" th:text="${#lists.size(employees.?[employeeContractSigned == true])}">
+                    0
+                </h2>
                 <p>Employees with signed contracts</p>
             </div>
+
             <div class="stat-card" style="border-radius:22px;">
                 <span class="stat-label">Pending Contracts</span>
                 <h2 style="color:#c07a1a;"
                     th:text="${#lists.size(employees.?[employeeContractSigned == false || employeeContractSigned == null])}">
-                    0</h2>
+                    0
+                </h2>
                 <p>Contracts not yet signed</p>
             </div>
+
             <div class="stat-card" style="border-radius:22px;">
-                <span class="stat-label">Your Role</span>
+                <span class="stat-label">Current User</span>
 
-                <h2 style="color:#15335b;" sec:authorize="hasRole('ROLE_SUPERVISOR')">Supervisor</h2>
-                <h2 style="color:#15335b;" sec:authorize="hasRole('ROLE_MANAGER')">Manager</h2>
-                <h2 style="color:#15335b;" sec:authorize="hasRole('ROLE_ADMIN')">Admin</h2>
+                <h2 style="color:#15335b; font-size:1.35rem;" sec:authentication="name">
+                    username
+                </h2>
 
-                <p>Current access level</p>
+                <p sec:authorize="hasRole('SUPERVISOR')">Supervisor access</p>
+                <p sec:authorize="hasRole('MANAGER')">Manager access</p>
+                <p sec:authorize="hasRole('ADMIN')">Admin access</p>
             </div>
+
         </div>
 
         <div class="employee-table-card">
@@ -211,6 +257,7 @@
                 <div>
                     <h2>All Employees</h2>
                 </div>
+
                 <div class="button-row">
 
                     <div class="search-wrap">
@@ -218,13 +265,19 @@
                             <circle cx="6.5" cy="6.5" r="5" stroke="#a0b4c8" stroke-width="1.4" />
                             <path d="M11 11L13.5 13.5" stroke="#a0b4c8" stroke-width="1.4" stroke-linecap="round" />
                         </svg>
+
                         <input class="search-input" type="text" id="searchInput" placeholder="Search employees…"
                             onkeyup="filterTable()">
                     </div>
 
-                    <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')" th:href="@{/employees/showFormForAdd}"
+                    <a sec:authorize="hasAnyRole('MANAGER', 'ADMIN')" th:href="@{/employees/showFormForAdd}"
                         class="primary-btn">
                         + Add Employee
+                    </a>
+
+                    <a sec:authorize="hasAnyRole('MANAGER', 'ADMIN')" th:href="@{/signup/pending}"
+                        class="secondary-btn">
+                        Pending User Requests
                     </a>
 
                     <form th:action="@{/logout}" method="post" class="logout-form">
@@ -236,6 +289,7 @@
 
             <div class="table-wrap">
                 <table class="employee-table" id="employeeTable">
+
                     <thead>
                         <tr>
                             <th>Employee</th>
@@ -248,65 +302,94 @@
                             <th>Emerg. Contact</th>
                             <th>Emerg. Phone</th>
 
-                            <th sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">Actions</th>
+                            <th sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">Actions</th>
                         </tr>
                     </thead>
+
                     <tbody>
+
                         <tr th:each="employee : ${employees}">
 
                             <td>
                                 <div class="employee-person">
+
                                     <div class="avatar-circle" th:text="${#strings.substring(employee.firstName,0,1)
                                                + #strings.substring(employee.lastName,0,1)}">
+                                        JD
                                     </div>
+
                                     <div>
                                         <div class="employee-name"
                                             th:text="${employee.firstName + ' ' + employee.lastName}">
+                                            Jane Doe
                                         </div>
+
                                         <div class="employee-sub" th:text="${'ID: #' + employee.employeeId}">
+                                            ID: #1
                                         </div>
                                     </div>
+
                                 </div>
                             </td>
 
-                            <td><span class="badge-soft" th:text="${employee.startDate}"></span></td>
-
                             <td>
-                                <span class="money-pill"
-                                    th:text="${'$' + #numbers.formatDecimal(employee.salary, 1, 'COMMA', 2, 'POINT')}">
+                                <span class="badge-soft" th:text="${employee.startDate}">
+                                    2026-04-24
                                 </span>
                             </td>
 
                             <td>
-                                <span th:if="${employee.employeeContractSigned}" class="badge-yes">&#10003; Yes</span>
-                                <span th:unless="${employee.employeeContractSigned}" class="badge-no">&#10007; No</span>
+                                <span class="money-pill"
+                                    th:text="${'$' + #numbers.formatDecimal(employee.salary, 1, 'COMMA', 2, 'POINT')}">
+                                    $0.00
+                                </span>
                             </td>
 
-                            <td><span class="dept-pill" th:text="${employee.socialSecurityNumber}"></span></td>
-                            <td th:text="${employee.birthday}"></td>
-                            <td th:text="${employee.phoneNumber}"></td>
-                            <td th:text="${employee.emergencyContactName}"></td>
-                            <td th:text="${employee.emergencyContactPhoneNumber}"></td>
+                            <td>
+                                <span th:if="${employee.employeeContractSigned}" class="badge-yes">
+                                    &#10003; Yes
+                                </span>
 
-                            <td sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+                                <span th:unless="${employee.employeeContractSigned}" class="badge-no">
+                                    &#10007; No
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="dept-pill" th:text="${employee.socialSecurityNumber}">
+                                    000-00-0000
+                                </span>
+                            </td>
+
+                            <td th:text="${employee.birthday}">
+                                2000-01-01
+                            </td>
+
+                            <td th:text="${employee.phoneNumber}">
+                                000-000-0000
+                            </td>
+
+                            <td th:text="${employee.emergencyContactName}">
+                                Contact Name
+                            </td>
+
+                            <td th:text="${employee.emergencyContactPhoneNumber}">
+                                000-000-0000
+                            </td>
+
+                            <td sec:authorize="hasAnyRole('MANAGER', 'ADMIN')">
                                 <div class="button-row compact-row">
 
-                                    <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
-                                        th:href="@{/employees/showFormForUpdate(employeeId=${employee.employeeId})}"
+                                    <a th:href="@{/employees/showFormForUpdate(employeeId=${employee.employeeId})}"
                                         class="secondary-btn"
                                         style="padding:8px 14px; font-size:0.85rem; border-radius:10px;">
                                         Edit
                                     </a>
 
-                                    <button sec:authorize="hasRole('ROLE_ADMIN')" class="danger-btn"
+                                    <button sec:authorize="hasRole('ADMIN')" class="danger-btn delete-trigger"
                                         style="padding:8px 14px; font-size:0.85rem; border-radius:10px; border:none; cursor:pointer;"
-                                        th:attr="onclick='openDeleteModal('
-                                                 + ${employee.employeeId}
-                                                 + ', \'' 
-                                                 + ${employee.firstName}
-                                                 + ' '
-                                                 + ${employee.lastName}
-                                                 + '\')'">
+                                        th:data-id="${employee.employeeId}"
+                                        th:data-name="${employee.firstName + ' ' + employee.lastName}">
                                         Delete
                                     </button>
 
@@ -320,14 +403,17 @@
                                 <div class="empty-state">
                                     <h3>No employees found</h3>
                                     <p>Add your first employee record to get started.</p>
-                                    <a sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
+
+                                    <a sec:authorize="hasAnyRole('MANAGER', 'ADMIN')"
                                         th:href="@{/employees/showFormForAdd}" class="primary-btn">
                                         + Add Employee
                                     </a>
                                 </div>
                             </td>
                         </tr>
+
                     </tbody>
+
                 </table>
             </div>
 
@@ -335,8 +421,10 @@
                 <span>
                     <span class="info-label">Showing</span>
                     <strong id="footerCount" th:text="${#lists.size(employees)} + ' employee(s)'">
+                        0 employee(s)
                     </strong>
                 </span>
+
                 <a th:href="@{/}" class="secondary-btn"
                     style="padding:9px 16px; font-size:0.88rem; border-radius:12px;">
                     &#8592; Back to Home
@@ -344,17 +432,23 @@
             </div>
 
         </div>
+
     </div>
 
     <div class="modal-overlay" id="deleteModal">
         <div class="modal-box">
             <h3>Delete Employee?</h3>
-            <p id="deleteModalMsg">This action cannot be undone.</p>
+
+            <p id="deleteModalMsg">
+                This action cannot be undone.
+            </p>
+
             <div class="modal-actions">
                 <button class="secondary-btn" onclick="closeDeleteModal()"
                     style="border-radius:12px; padding:10px 20px;">
                     Cancel
                 </button>
+
                 <a id="deleteConfirmBtn" href="#" class="danger-btn"
                     style="border-radius:12px; padding:10px 20px; font-weight:700;">
                     Yes, Delete
@@ -368,11 +462,16 @@
             const input = document.getElementById('searchInput').value.toLowerCase();
             const rows = document.querySelectorAll('#employeeTable tbody tr:not(.empty-row)');
             let visible = 0;
+
             rows.forEach(function (row) {
                 const match = row.textContent.toLowerCase().includes(input);
                 row.style.display = match ? '' : 'none';
-                if (match) visible++;
+
+                if (match) {
+                    visible++;
+                }
             });
+
             document.getElementById('footerCount').textContent =
                 visible + ' of ' + rows.length + ' employee(s)';
         }
@@ -380,8 +479,10 @@
         function openDeleteModal(empId, empName) {
             document.getElementById('deleteModalMsg').textContent =
                 'Are you sure you want to delete ' + empName + '? This cannot be undone.';
+
             document.getElementById('deleteConfirmBtn').href =
                 '/employees/delete?employeeId=' + empId;
+
             document.getElementById('deleteModal').classList.add('open');
         }
 
@@ -389,8 +490,18 @@
             document.getElementById('deleteModal').classList.remove('open');
         }
 
+        document.querySelectorAll('.delete-trigger').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const empId = this.dataset.id;
+                const empName = this.dataset.name;
+                openDeleteModal(empId, empName);
+            });
+        });
+
         document.getElementById('deleteModal').addEventListener('click', function (e) {
-            if (e.target === this) closeDeleteModal();
+            if (e.target === this) {
+                closeDeleteModal();
+            }
         });
     </script>
 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pending User Requests</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="page-shell">
+
+    <header class="top-banner smaller-banner">
+        <div>
+            <p class="eyebrow">Jupiter Company &mdash; User Approval</p>
+
+            <h1>Pending User Requests</h1>
+
+            <p class="subtitle">
+                Review new employee account requests. Approved users will be able to log in
+                with view-only employee access.
+            </p>
+        </div>
+
+        <img th:src="@{/images/AirlineLogo.svg}" alt="Jupiter Company logo" class="banner-image">
+    </header>
+
+    <div class="employee-table-card">
+
+        <div class="table-top">
+            <div>
+                <h2>Signup Requests</h2>
+            </div>
+
+            <div class="button-row">
+                <a th:href="@{/employees/list}" class="secondary-btn link-btn">
+                    Back to Employees
+                </a>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="employee-table">
+
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Requested Role</th>
+                        <th>Approval Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="user : ${pendingUsers}">
+
+                        <td>
+                            <strong th:text="${user['username']}">
+                                username
+                            </strong>
+                        </td>
+
+                        <td>
+                            <span class="dept-pill" th:text="${user['authority']}">
+                                ROLE_SUPERVISOR
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge-soft">
+                                Pending
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="button-row compact-row">
+
+                                <form th:action="@{/signup/approve}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="username" th:value="${user['username']}">
+
+                                    <button type="submit" class="primary-btn"
+                                        style="padding:8px 14px; font-size:0.85rem; border-radius:10px; border:none; cursor:pointer;">
+                                        Approve
+                                    </button>
+                                </form>
+
+                                <form th:action="@{/signup/deny}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <input type="hidden" name="username" th:value="${user['username']}">
+
+                                    <button type="submit" class="danger-btn"
+                                        style="padding:8px 14px; font-size:0.85rem; border-radius:10px; border:none; cursor:pointer;">
+                                        Deny
+                                    </button>
+                                </form>
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                    <tr class="empty-row" th:if="${#lists.isEmpty(pendingUsers)}">
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <h3>No pending user requests</h3>
+                                <p>
+                                    There are currently no signup requests waiting for approval.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

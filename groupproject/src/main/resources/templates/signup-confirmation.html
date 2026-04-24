@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Signup Submitted</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="page-shell center-page">
+
+    <div class="message-card">
+
+        <img th:src="@{/images/AirlineLogo.svg}" alt="Jupiter Company logo" class="small-hero">
+
+        <h1>Signup Request Submitted</h1>
+
+        <p>
+            Your account request has been submitted successfully.
+            A Manager or Admin must approve your account before you can log in.
+        </p>
+
+        <div class="button-row center-buttons">
+            <a th:href="@{/}" class="primary-btn link-btn">
+                Back to Home
+            </a>
+
+            <a th:href="@{/showLoginPage}" class="secondary-btn link-btn">
+                Go to Login
+            </a>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

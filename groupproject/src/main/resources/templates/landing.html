@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupiter Company HR Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="page-shell center-page">
+    <div class="message-card">
+        <img th:src="@{/images/AirlineLogo.svg}" alt="Jupiter Company logo" class="small-hero">
+
+        <h1>Welcome to Jupiter Company</h1>
+
+        <p>
+            This employee management portal allows authorized users to view,
+            add, update, and delete employee records based on their assigned role.
+        </p>
+
+        <div class="button-row center-buttons">
+            <a th:href="@{/showLoginPage}" class="secondary-btn link-btn">
+                Login
+            </a>
+
+            <a th:href="@{/signup/showSignupForm}" class="secondary-btn link-btn">
+                Create Employee Account
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

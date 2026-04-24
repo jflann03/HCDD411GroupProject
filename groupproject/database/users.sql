@@ -7,7 +7,7 @@ INSERT INTO users (username, password, enabled) VALUES
     ('james', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE),
     ('maria', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE),
     ('david', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE),
-    ('sarah', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe.', TRUE);
+    ('sarah', '{bcrypt}$2a$12$key0.wEmg2Y9RnlEhebdru5mwbJPFMqXaAgqTu9uJ9j3txaiDFCFe', TRUE);
  
 INSERT INTO authorities (username, authority) VALUES
     ('james', 'ROLE_SUPERVISOR'),

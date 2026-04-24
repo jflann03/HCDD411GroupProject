@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Portal Login</title>
+    <title>Create Employee Account</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -20,22 +20,17 @@
             <div class="auth-art-panel">
                 <img th:src="@{/images/AirlineLogo.svg}" alt="Employee portal illustration" class="auth-illustration">
             </div>
-
             <div class="auth-login-panel">
                 <div class="login-card">
                     <h1 class="login-title">
-                        <span>Employee</span> Portal
+                        <span>Create</span> Account
                     </h1>
 
-                    <div th:if="${param.error}" class="alert error">
-                        Invalid username or password.
+                    <div th:if="${signupError}" class="alert error">
+                        <span th:text="${signupError}">Signup error message</span>
                     </div>
 
-                    <div th:if="${param.logout}" class="alert success">
-                        You have been logged out.
-                    </div>
-
-                    <form th:action="@{/authenticateTheUser}" method="post" class="login-form">
+                    <form th:action="@{/signup/processSignupForm}" method="post" class="login-form">
                         <div class="login-field">
                             <label for="username">Username</label>
                             <input type="text" id="username" name="username" placeholder="Username" required>
@@ -46,7 +41,13 @@
                             <input type="password" id="password" name="password" placeholder="**********" required>
                         </div>
 
-                        <button type="submit" class="primary-btn login-btn">Login</button>
+                        <div class="login-field">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="**********"
+                                required>
+                        </div>
+
+                        <button type="submit" class="primary-btn login-btn">Signup</button>
 
                         <a th:href="@{/}" class="secondary-auth-link">Home Page</a>
                     </form>

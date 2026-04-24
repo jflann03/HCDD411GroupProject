@@ -2,6 +2,7 @@ package psu.edu.groupproject.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,6 +26,12 @@ public class UserSignupController {
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
 
+    private static final Set<String> ALLOWED_ROLES = Set.of(
+            "ROLE_SUPERVISOR",
+            "ROLE_MANAGER",
+            "ROLE_ADMIN"
+    );
+
     public UserSignupController(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
         this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
@@ -47,6 +54,11 @@ public class UserSignupController {
 
         userName = userName.trim().toLowerCase();
 
+        if (userName.isBlank()) {
+            theModel.addAttribute("signupError", "Username cannot be blank.");
+            return "signup-form";
+        }
+
         if (!password.equals(confirmPassword)) {
             theModel.addAttribute("signupError", "Passwords do not match.");
             return "signup-form";
@@ -65,21 +77,16 @@ public class UserSignupController {
 
         String encodedPassword = passwordEncoder.encode(password);
 
+        /*
+         * New users are created as disabled accounts.
+         * Do NOT assign a role here anymore.
+         * A manager/admin chooses the role from the pending approval page.
+         */
         jdbcTemplate.update(
                 "INSERT INTO users (username, password, enabled) VALUES (?, ?, ?)",
                 userName,
                 encodedPassword,
                 false
-        );
-
-        /*
-         * Give every new signup the basic supervisor role.
-         * The account is still disabled until approved.
-         */
-        jdbcTemplate.update(
-                "INSERT INTO authorities (username, authority) VALUES (?, ?)",
-                userName,
-                "ROLE_SUPERVISOR"
         );
 
         session.setAttribute(
@@ -114,11 +121,34 @@ public class UserSignupController {
     }
 
     @PostMapping("/approve")
-    public String approveUser(@RequestParam("username") String userName) {
+    public String approveUser(
+            @RequestParam("username") String userName,
+            @RequestParam("role") String role) {
 
-        logger.info("Approving user: " + userName);
+        logger.info("Approving user: " + userName + " with role: " + role);
 
         userName = userName.trim().toLowerCase();
+        role = role.trim().toUpperCase();
+
+        if (!ALLOWED_ROLES.contains(role)) {
+            throw new IllegalArgumentException("Invalid role selected: " + role);
+        }
+
+        /*
+         * Delete any old role first.
+         * This protects you from duplicate role rows and also fixes users who were
+         * created before this approval flow was changed.
+         */
+        jdbcTemplate.update(
+                "DELETE FROM authorities WHERE username = ?",
+                userName
+        );
+
+        jdbcTemplate.update(
+                "INSERT INTO authorities (username, authority) VALUES (?, ?)",
+                userName,
+                role
+        );
 
         jdbcTemplate.update(
                 "UPDATE users SET enabled = true WHERE username = ?",
